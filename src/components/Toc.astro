@@ -1,0 +1,63 @@
+---
+type Props = {
+  toc: {
+    level: number;
+    id: string;
+    text: string;
+  }[];
+};
+
+const { toc } = Astro.props;
+---
+
+<div class="toc-container" x-data="{ open: false }">
+  <h3
+    class="mb-4 font-semibold cursor-pointer flex items-center gap-2"
+    x-on:click="open = !open"
+  >
+    <span x-show="!open">▶︎</span>
+    <span x-show="open">▼</span>
+    目次
+  </h3>
+  <nav class="text-sm">
+    <ul x-show="open" x-collapse class="space-y-1 m-0 p-0">
+      {
+        toc.map((item) => (
+          <li data-level={item.level} class="toc-item">
+            <a href={`#${item.id}`}>{item.text}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .toc-container {
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 0 5px;
+    font-family: system-ui, sans-serif;
+  }
+  .toc-container ul {
+    padding: 0 5px;
+  }
+  .toc-item {
+    list-style: none;
+    padding-left: calc(var(--indent-size, 1rem) * var(--level, 1));
+  }
+  .toc-item[data-level="2"] {
+    padding-left: 1rem;
+  }
+  .toc-item[data-level="3"] {
+    padding-left: 2rem;
+  }
+  .toc-item a {
+    text-decoration: none;
+    color: #333;
+  }
+  .toc-item a:hover {
+    text-decoration: underline;
+    color: #0070f3;
+  }
+</style>

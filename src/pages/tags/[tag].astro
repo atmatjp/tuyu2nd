@@ -1,0 +1,64 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getBlogs } from "../../libs/microcms.ts";
+import "../../styles/blog.css";
+
+const tag = String(Astro.params.tag);
+
+type Blog = {
+  id: string;
+  title: string;
+  tag: string[];
+  createdAt: string;
+  content: string;
+};
+
+const response = await getBlogs({
+  filters: `tag[contains]${tag}`,
+  fields: ["id", "title", "tag", "createdAt", "content"],
+});
+const blogs: Blog[] = response.contents || [];
+
+export async function getStaticPaths() {
+  const response = await getBlogs({ fields: ["tag"] });
+  const blogs: { tag: string[] }[] = response.contents || [];
+
+  const uniqueTags = [...new Set(blogs.flatMap((blog) => blog.tag))];
+
+  return uniqueTags.map((tag) => ({
+    params: { tag },
+    props: {},
+  }));
+}
+---
+
+<Layout title={`${tag}`}>
+  <div class="all" data-pagefind-ignore="all">
+    <div class="content">
+      <h1>{tag}</h1>
+      {
+        blogs.length > 0 ? (
+          blogs.map((blog) => (
+            <li class="blog-item">
+              <a href={`/blogs/${blog.id}`} class="blog-title">
+                {blog.title}
+              </a>
+              <div class="blog-tags">
+                {blog.tag.map((t) => (
+                  <a href={`/tags/${encodeURIComponent(t)}`} class="blog-tag">
+                    #{t}
+                  </a>
+                ))}
+              </div>
+              <div class="blog-date">
+                <p>{new Date(blog.createdAt).toLocaleDateString("ja-JP")}</p>
+              </div>
+            </li>
+          ))
+        ) : (
+          <li>このタグの記事はありません。</li>
+        )
+      }
+    </div>
+  </div>
+</Layout>

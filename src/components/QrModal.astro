@@ -1,0 +1,95 @@
+---
+import QrCode from "./QRCode.astro";
+import { getBlogs } from "../libs/microcms"; // microCMSのAPI
+const { blogId } = Astro.params;
+
+const { pageTitle } = Astro.props;
+
+const response = await getBlogs({
+  filters: `id[equals]${blogId}`,
+  fields: ["createdAt", "updatedAt", "tag"],
+});
+const blog = response.contents[0]; // 取得したデータの最初の要素を使用
+
+const createdAt = blog ? blog.createdAt : null;
+const updatedAt = blog ? blog.updatedAt : null;
+const tag = blog ? blog.tag : null;
+---
+
+<div x-data="{ showQR: false }">
+  <button
+    class="qr-button"
+    x-on:click="showQR = true"
+    aria-label="QRコードを表示"
+  >
+    <span class="svg-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <rect width="5" height="5" x="3" y="3" rx="1"></rect>
+          <rect width="5" height="5" x="16" y="3" rx="1"></rect>
+          <rect width="5" height="5" x="3" y="16" rx="1"></rect>
+          <path
+            d="M21 16h-3a2 2 0 0 0-2 2v3m5 0v.01M12 7v3a2 2 0 0 1-2 2H7m-4 0h.01M12 3h.01M12 16v.01M16 12h1m4 0v.01M12 21v-1"
+          ></path>
+        </g>
+      </svg>
+    </span>
+  </button>
+
+  <div x-show="showQR" x-transition class="modal-bg" style="display: none;">
+    <div class="card" x-on:click.outside="showQR = false">
+      <div class="card-header">
+        <div class="logo"><h1>tuyutama.net</h1></div>
+        <!-- サイトロゴ -->
+        <h2 class="title">{pageTitle}</h2>
+        {
+          tag && tag.length > 0 && (
+            <div class="tags">
+              {tag.map((t) => (
+                <span class="tag">#{t}</span>
+              ))}
+            </div>
+          )
+        }
+        <!-- ページタイトル -->
+      </div>
+
+      <div class="publish-info">
+        <div class="date-block">
+          <div class="label">公開日</div>
+          <div class="date">
+            {createdAt ? new Date(createdAt).toLocaleDateString("ja-JP") : "-"}
+          </div>
+        </div>
+
+        <div class="arrow">→</div>
+
+        <div class="date-block">
+          <div class="label">更新日</div>
+          <div class="date">
+            {updatedAt ? new Date(updatedAt).toLocaleDateString("ja-JP") : "-"}
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="qr-wrapper">
+          <QrCode url={`https://tuyutama.net${Astro.url.pathname}`} />
+          <p class="url">https://tuyutama.net{Astro.url.pathname}</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer"></div>
+  </div>
+</div>

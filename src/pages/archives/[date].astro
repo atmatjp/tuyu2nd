@@ -1,0 +1,82 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getBlogs } from "../../libs/microcms.ts";
+import "../../styles/blog.css";
+
+const date = Astro.params.date ? String(Astro.params.date) : "";
+
+type Blog = {
+  id: string;
+  title: string;
+  tag: string[];
+  createdAt: string;
+  content: string;
+};
+
+const response: any = await getBlogs({
+  fields: ["id", "title", "tag", "createdAt", "content"],
+});
+const blogs: Blog[] = response?.contents || [];
+
+const filteredBlogs: Blog[] = blogs
+  .filter((blog) => {
+    if (!blog.createdAt) return false;
+    const blogDate = new Date(blog.createdAt);
+    if (isNaN(blogDate.getTime())) return false;
+    const blogMonth = `${blogDate.getFullYear()}-${String(blogDate.getMonth() + 1).padStart(2, "0")}`;
+    return blogMonth === date;
+  })
+  .sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+export async function getStaticPaths() {
+  const response = await getBlogs({ fields: ["createdAt"] });
+  const blogs: Blog[] = response.contents || [];
+
+  const uniqueMonths = [
+    ...new Set(
+      blogs.map((blog) => {
+        const blogDate = new Date(blog.createdAt);
+        return `${blogDate.getFullYear()}-${String(blogDate.getMonth() + 1).padStart(2, "0")}`;
+      })
+    ),
+  ];
+
+  return uniqueMonths.map((month) => ({
+    params: { date: month },
+    props: {},
+  }));
+}
+---
+
+<Layout title={`${date}`}>
+  <div class="all" data-pagefind-ignore="all">
+    <div class="content">
+      <h1>{date}</h1>
+      {
+        filteredBlogs.length > 0 ? (
+          filteredBlogs.map((blog) => (
+            <li class="blog-item">
+              <a href={`/blogs/${blog.id}`} class="blog-title">
+                {blog.title}
+              </a>
+              <div class="blog-tags">
+                {blog.tag.map((t) => (
+                  <a href={`/tags/${encodeURIComponent(t)}`} class="blog-tag">
+                    #{t}
+                  </a>
+                ))}
+              </div>
+              <div class="blog-date">
+                <p>{new Date(blog.createdAt).toLocaleDateString("ja-JP")}</p>
+              </div>
+            </li>
+          ))
+        ) : (
+          <li>この月の記事はありません。</li>
+        )
+      }
+    </div>
+  </div>
+</Layout>

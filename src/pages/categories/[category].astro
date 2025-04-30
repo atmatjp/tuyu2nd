@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getBlogs } from "../../libs/microcms";
+import "../../styles/blog.css";
+
+const category = String(Astro.params.category);
+
+type Blog = {
+  id: string;
+  title: string;
+  tag: string[];
+  category: string[];
+  createdAt: string;
+  content: string;
+};
+
+const response = await getBlogs({
+  filters: `category[contains]${category}`,
+  fields: ["id", "title", "tag", "category", "createdAt", "content"],
+});
+const blogs: Blog[] = response.contents || [];
+
+export async function getStaticPaths() {
+  const response = await getBlogs({ fields: ["category"] });
+  const blogs: { category: string[] }[] = response.contents || [];
+
+  const uniqueCategories = [
+    ...new Set(blogs.flatMap((blog) => blog.category || [])),
+  ];
+
+  return uniqueCategories.map((cat) => ({
+    params: { category: cat },
+    props: {},
+  }));
+}
+---
+
+<Layout title={`${category}`}>
+  <div class="all" data-pagefind-ignore="all">
+    <div class="content">
+      <h1>{category}</h1>
+      <ul>
+        {
+          blogs.length > 0 ? (
+            blogs.map((blog) => (
+              <li class="blog-item">
+                <a href={`/blogs/${blog.id}`} class="blog-title">
+                  {blog.title}
+                </a>
+                <div class="blog-tags">
+                  {blog.tag.map((t) => (
+                    <a href={`/tags/${encodeURIComponent(t)}`} class="blog-tag">
+                      #{t}
+                    </a>
+                  ))}
+                </div>
+                <div class="blog-date">
+                  <p>{new Date(blog.createdAt).toLocaleDateString("ja-JP")}</p>
+                </div>
+              </li>
+            ))
+          ) : (
+            <li>このカテゴリの記事はありません。</li>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+</Layout>

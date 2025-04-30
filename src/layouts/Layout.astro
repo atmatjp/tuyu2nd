@@ -1,0 +1,40 @@
+---
+import Header from "../components/Header.astro";
+import QrModal from "../components/QrModal.astro";
+import FooterIMG from "../components/FooterIMG.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+const { title } = Astro.props;
+import { ViewTransitions } from "astro:transitions";
+---
+
+<html lang="ja">
+  <head>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="/assets/supaten.png" />
+    <meta name="generator" content={Astro.generator} /><meta
+      name="keywords"
+      content="つゆたまどっとネット,ブログ, 日記, 電子工作"
+    /><meta name="author" content="kobayasi" /><meta
+      name="description"
+      content="tuyutama.net"
+    /><title>{title}</title>
+    <link rel="icon" href="/clover.ico" type="image/x-icon" />
+  </head>
+
+  <body>
+    <div class="all">
+      <Header pageTitle={title} />
+      <slot />
+      <FooterIMG />
+      <Footer />
+    </div>
+  </body>
+  <script
+    src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"
+  ></script>
+</html>

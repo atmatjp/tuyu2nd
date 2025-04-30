@@ -1,0 +1,101 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getBlogs, type Blog } from "../../libs/microcms.ts"; // microcms.tsから型をインポート
+import "../../styles/[blogId].css";
+import Toc from "../../components/Toc.astro";
+import { load } from "cheerio";
+import hljs from "highlight.js";
+import "highlight.js/styles/hybrid.css";
+import {
+  microCMSRichEditorHandler,
+  tocExtractor,
+} from "microcms-rich-editor-handler"; // 必要ならインポート！
+
+// 静的パスを生成
+export async function getStaticPaths() {
+  const response = await getBlogs();
+  const blogs = response.contents;
+
+  return blogs.map((blog) => ({
+    params: { blogId: blog.id },
+    props: { blog, allBlogs: blogs },
+  }));
+}
+
+// props を受け取る
+const { blog, allBlogs }: { blog: Blog; allBlogs: Blog[] } = Astro.props;
+
+// 前後の記事を探す
+const currentIndex = allBlogs.findIndex((b) => b.id === blog.id);
+const prevBlog = currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
+const nextBlog =
+  currentIndex < allBlogs.length - 1 ? allBlogs[currentIndex + 1] : null;
+
+// ハイライト処理
+const $ = load(blog.content);
+$("pre code").each((_, elm) => {
+  const result = hljs.highlightAuto($(elm).text());
+  $(elm).html(result.value);
+  $(elm).addClass("hljs");
+});
+blog.content = $.html();
+
+const {
+  html,
+  data: { toc },
+} = await microCMSRichEditorHandler(blog.content, {
+  extractors: {
+    toc: [
+      tocExtractor({
+        ignoreLevels: [4, 5],
+      }),
+      { phase: "before" },
+    ],
+  },
+});
+const formattedJson = `
+<pre>{
+  "createdAt": "${blog.createdAt ? new Date(blog.createdAt).toLocaleDateString("ja-JP").replace(/\//g, "/") : "不明"}",
+  "title": "${blog.title || ""}",
+  "category": [${blog.category?.map((cat) => `"<a href='/categories/${cat}'>${cat}</a>"`).join(", ") ?? ""}],
+  "tag": [${blog.tag?.map((tag) => `"<a href='/tags/${tag}'>${tag}</a>"`).join(", ") ?? ""}]
+}
+</pre>
+`;
+---
+
+<Layout title={blog.title}>
+  <div class="all">
+    <div class="content">
+      <h1>{blog.title}</h1>
+      <!--JSON -->
+      <div class="blog-meta">
+        <div class="json-container" set:html={formattedJson} />
+      </div>
+      <!--index -->
+      <!--main-content -->
+      <div set:html={blog.content} />
+    </div>
+
+    <div class="blog-navigation" data-pagefind-ignore="all">
+      <div class="prev">
+        {
+          prevBlog ? (
+            <a href={`/blogs/${prevBlog.id}`}>← {prevBlog.title}</a>
+          ) : (
+            <a class="no-post">次の記事はありません</a>
+          )
+        }
+      </div>
+      <div class="next">
+        {
+          nextBlog ? (
+            <a href={`/blogs/${nextBlog.id}`}>{nextBlog.title} →</a>
+          ) : (
+            <a class="no-post">前の記事はありません</a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Layout>

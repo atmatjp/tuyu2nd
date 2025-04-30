@@ -1,0 +1,60 @@
+---
+import QRCode from "./QRCode.astro";
+import "../styles/QR.css";
+import QrModal from "./QrModal.astro";
+const { pageTitle } = Astro.props;
+import { Breadcrumbs } from "astro-breadcrumbs";
+import "astro-breadcrumbs/breadcrumbs.css";
+---
+
+<header>
+  <div class="menu" data-pagefind-ignore="all">
+    <div class="breadcrumbs">
+      <Breadcrumbs
+        linkTextFormat="lower"
+        ariaLabel="Breadcrumbs"
+        truncated="true"
+      >
+        <svg
+          slot="index"
+          aria-label="Home Page"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <svg
+          slot="separator"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </Breadcrumbs>
+    </div>
+    <div class="qr">
+      <QrModal pageTitle={pageTitle} />
+    </div>
+  </div>
+  <div class="nav">
+    <a href="/">Home</a>
+    <a href="/categories">Category</a>
+    <a href="/tags">Tag</a>
+    <a href="/archives">Archive</a>
+  </div>
+</header>

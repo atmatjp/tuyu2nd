@@ -1,0 +1,37 @@
+---
+import Layout from "../../layouts/Layout.astro"; // 階層注意！
+import { getBlogs } from "../../libs/microcms.ts";
+import "../../styles/blog.css";
+
+const response = await getBlogs({
+  fields: ["tag"],
+});
+
+const blogs = response.contents as { tag: string[] }[];
+
+const tagCountMap = new Map<string, number>();
+blogs.forEach((blog) => {
+  blog.tag.forEach((tag) => {
+    tagCountMap.set(tag, (tagCountMap.get(tag) || 0) + 1);
+  });
+});
+
+const uniqueTags: string[] = [...tagCountMap.keys()];
+---
+
+<Layout title="Tags">
+  <div class="all" data-pagefind-ignore="all">
+    <div class="content">
+      <h1>Tags</h1>
+      {
+        uniqueTags.map((tag) => (
+          <li class="blog-item">
+            <a href={`/tags/${encodeURIComponent(tag)}`} class="blog-title">
+              {tag} ({tagCountMap.get(tag)})
+            </a>
+          </li>
+        ))
+      }
+    </div>
+  </div>
+</Layout>

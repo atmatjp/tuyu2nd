@@ -1,0 +1,148 @@
+---
+import Document from "../SVG/Document.astro";
+import Plant from "../SVG/Plant.astro";
+---
+
+<h3>Projects</h3>
+<div class="project-container">
+  <div class="project-card">
+    <div class="project-icon"><Document /></div>
+    <div class="project-body">
+      <div class="project-header">
+        <a href="https://github.com/atmatjp/new-page" target="_blank"
+          >tuyutama.net</a
+        >
+        <span class="project-arrow">↗</span>
+      </div>
+      <p class="project-description">Personal website</p>
+
+      <div class="project-tags">
+        <span>Astro</span>
+        <span>JavaScript</span>
+        <span>microCMS</span>
+        <span>Cloudflare</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="project-container">
+  <div class="project-card">
+    <div class="project-icon"><Plant /></div>
+    <div class="project-body">
+      <div class="project-header">
+        <a href="#">Edamame</a>
+        <span class="project-arrow" style="color: rgb(204, 100, 100);">×</span>
+      </div>
+      <p class="project-description">Home cultivation</p>
+      <div class="project-tags">
+        <span>Water</span>
+        <span>Soil</span>
+        <span>Sunlight</span>
+        <span>Arduino</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .project-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .project-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    background-color: var(--content-bg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .project-icon {
+    font-size: 2rem;
+    line-height: 1;
+    padding-top: 0.25rem;
+    color: var(--text-color);
+  }
+
+  .project-body {
+    flex: 1;
+  }
+
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--text-color);
+  }
+
+  .project-header a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+
+  .project-header a:hover {
+    color: var(--link-hover-color);
+  }
+
+  .project-header span {
+    text-align: right;
+    color: rgb(96, 175, 135);
+  }
+
+  .project-arrow {
+    font-size: 0.9rem;
+    color: var(--border-color);
+    margin-left: auto;
+  }
+
+  .project-arrow.red {
+    color: #e63946;
+  }
+
+  .project-status {
+    font-size: 0.8rem;
+    color: var(--border-color);
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  .project-description {
+    margin: 0.4rem 0;
+    color: var(--text-color);
+    font-size: 0.95rem;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .project-tags span {
+    background-color: var(--border-color);
+    color: var(--link-color);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .batu span {
+    color: #e63946;
+  }
+</style>
