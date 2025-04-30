@@ -6,16 +6,15 @@
 .blog-title:hover {text-decoration: underline;color: var(--link-color);}
 .blog-title a{margin: 0 0 30px 0;color: var(--blog-tag-color);}
 
-.blog-tags a{font-size:1.1em;color: var(--blog-tag-color);text-decoration: none;}
-.blog-tags a{margin: 5px 0 5px 0;}
-.blog-tags  a{text-decoration: none;}
+.blog-tags{padding: 5px 0;}
+.blog-tags a{font-size:1em;color: var(--blog-tag-color);text-decoration: none;}
 .blog-tags a:hover {color: var(--link-hover-color);}
 
 .blog-date {color: var(--link-hover-color);font-size:1em;}
 .blog-date p{margin: 0 0 5px 0;}
 
 .blog-preview {color: var(--link-hover-color);font-size: 1.2em;}
-.blog-preview p{margin: auto;}
+.blog-preview p{margin: auto;font-size: 0.9em;}
 
   .blog-list {
       list-style: none;

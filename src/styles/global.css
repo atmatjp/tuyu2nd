@@ -1,5 +1,5 @@
 *{
-    font-weight: 400;
+font-weight: 300;
 }
 :root {
     --bg-color: #ECEFF4;
@@ -26,58 +26,22 @@
   }
 }
 */
-
-
-.light-icon svg,
-.dark-icon svg {
-  width: 50px;
-}
-
-        .svg {
-          text-align: center;
-        }
-    
-        .svg a {
-          text-decoration: none;
-          color: inherit;
-        }
-    
-        .svg a svg {
-          color: inherit !important;
-          fill: var(--icon-color) !important;
-        }
-
-html,
-body {width: 100%;margin: 0;padding: 0;background-color: var(--content-bg);
-    color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-     Roboto, "Helvetica Neue",Arial, sans-serif;}
+.light-icon svg,.dark-icon svg {width: 50px;}
+.svg {text-align: center;}    
+.svg a {text-decoration: none;color: inherit;}
+.svg a svg {color: inherit !important;fill: var(--icon-color) !important;}
+html,body {width: 100%;margin: 0;padding: 0;background-color: var(--content-bg);color: var(--text-color);font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto, "Helvetica Neue",Arial, sans-serif;}
 /* Header */
-header {background-color: var(--content-bg);
-  padding: 0 10px;}
-.menu {display: flex;justify-content: space-between;
-  align-items: center; border-bottom: 1px solid var(--border-color)}
+header {background-color: var(--content-bg);padding: 0 10px;}
+.menu {display: flex;justify-content: space-between;align-items: center; border-bottom: 1px solid var(--border-color)}
 .nav{margin: 10px;}
 .nav a{padding:0 2px;color: var(--blog-tag-color);text-decoration: none;}
-
-.breadcrumbs svg {
-  padding: 5px;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  /* 縮まないようにする */
-}
-
+.breadcrumbs svg{padding: 5px;width: 24px;height: 24px;flex-shrink: 0;}
 .qr-button .svg-icon svg {
-  color: var(--text-color);
-  /* ここで黒色に固定！ */
-  fill: black;
-  stroke: black;
-}
-
+  color: var(--text-color);fill: black;stroke: black;}
 /*main*/
 .all {
-  max-width: 700px;
+  max-width: 600px;
   background-color: var(--content-bg);
   margin: 0 auto;
   padding: 0 0.1rem;
