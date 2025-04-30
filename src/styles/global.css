@@ -36,7 +36,7 @@ header {background-color: var(--content-bg);padding: 0 10px;}
 .menu {display: flex;justify-content: space-between;align-items: center; border-bottom: 1px solid var(--border-color)}
 .nav{margin: 10px;}
 .nav a{padding:0 2px;color: var(--blog-tag-color);text-decoration: none;}
-.breadcrumbs svg{padding: 5px;width: 24px;height: 24px;flex-shrink: 0;}
+.breadcrumbs svg{padding:0 1px;width: 24px;height: 24px;flex-shrink: 0;}
 .qr-button .svg-icon svg {
   color: var(--text-color);fill: black;stroke: black;}
 /*main*/
