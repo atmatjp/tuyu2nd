@@ -38,23 +38,54 @@ export async function getStaticPaths() {
       <h1>{tag}</h1>
       {
         blogs.length > 0 ? (
-          blogs.map((blog) => (
-            <li class="blog-item">
-              <a href={`/blogs/${blog.id}`} class="blog-title">
-                {blog.title}
-              </a>
-              <div class="blog-tags">
-                {blog.tag.map((t) => (
-                  <a href={`/tags/${encodeURIComponent(t)}`} class="blog-tag">
-                    #{t}
-                  </a>
-                ))}
-              </div>
-              <div class="blog-date">
-                <p>{new Date(blog.createdAt).toLocaleDateString("ja-JP")}</p>
-              </div>
-            </li>
-          ))
+          <ul>
+            {blogs.map((blog) => (
+              <li class="blog-item">
+                <a href={`/blogs/${blog.id}`} class="blog-title">
+                  {blog.title}
+                </a>{" "}
+                <div class="blog-tags">
+                  {blog.tag &&
+                    blog.tag.map((t) => (
+                      <a
+                        href={`/tags/${encodeURIComponent(t)}`}
+                        class="blog-tag"
+                      >
+                        #{t}
+                      </a>
+                    ))}
+                </div>
+                <div class="blog-date">
+                  <p>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      style="position: relative; top: 2px;"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M5 6h14v2H5z"
+                        opacity="0.3"
+                      />
+                      <path
+                        fill="currentColor"
+                        d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zm0-12H5V6h14zM9 14H7v-2h2zm4 0h-2v-2h2zm4 0h-2v-2h2zm-8 4H7v-2h2zm4 0h-2v-2h2zm4 0h-2v-2h2z"
+                      />
+                    </svg>
+                    {new Date(blog.createdAt).toLocaleDateString("ja-JP")}
+                  </p>
+                </div>
+                <div class="blog-preview">
+                  <p>
+                    {blog.content
+                      ? blog.content.replace(/<[^>]+>/g, "").slice(0, 80) + "…"
+                      : ""}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         ) : (
           <li>このタグの記事はありません。</li>
         )
